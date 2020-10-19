@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-deployment
+  labels:
+    app: wordpress-web
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: wordpress-web
+  template:
+    metadata:
+      labels:
+        app: wordpress-web
+    spec:
+      containers:
+      - name: wordpress-web1
+        image: wordpress:php7.3
+        ports:
+        - containerPort: 80
+        env:
+          - name: WORDPRESS_DB_HOST
+            value: 10.99.88.153
+          - name: WORDPRESS_DB_USER
+            value: wpuser
+          - name: WORDPRESS_DB_PASSWORD
+            value: DEVOPS12345
+          - name: WORDPRESS_DB_NAME
+            value: wpdb
+          - name: MEMCACHE_HOST
+            value: mechached-service
